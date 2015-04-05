@@ -8,6 +8,8 @@ module Meetup
   end
 
   def self.events(events_options)
+    preflight
+
     options = self.options.dup.deep_merge({query: events_options})
 
     response = HTTParty.get("#{@base_uri}/2/events", options)
@@ -39,6 +41,14 @@ module Meetup
     attr_accessor :api_key
 
     def initialize
+    end
+  end
+
+private
+
+  def self.preflight
+    unless configuration.api_key
+      raise "Missing API Key"
     end
   end
 
