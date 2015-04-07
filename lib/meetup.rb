@@ -19,6 +19,18 @@ module Meetup
     end
   end
 
+  def self.all_events(events_options)
+    past_options = events_options.deep_merge({ status: "past" })
+
+    past_events = events(past_options)
+    future_events = events(events_options)
+    all_events = past_events + future_events
+
+    all_events.sort_by do |event|
+      event["time"]
+    end
+  end
+
   def self.options
     @base_uri = "http://api.meetup.com"
     @options = {
